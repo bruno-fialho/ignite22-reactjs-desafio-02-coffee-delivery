@@ -31,4 +31,16 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 1.125rem;
     line-height: 1.3;
   }
+
+  @media (max-width: 1200px) {
+    html {
+      font-size: 87.5%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    html {
+      font-size: 75%;
+    }
+  }
 `

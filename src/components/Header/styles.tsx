@@ -2,7 +2,9 @@ import styled from 'styled-components'
 
 export const HeaderContainer = styled.header`
   width: 100%;
+  max-width: 90rem;
   height: 6.5rem;
+  margin: 0 auto;
   padding: 0 10rem;
 
   display: flex;
@@ -38,6 +40,9 @@ export const HeaderContainer = styled.header`
       font-size: 0.875rem;
 
       svg {
+        width: 1.375rem;
+        height: 1.375rem;
+
         color: ${(props) => props.theme.purple};
       }
     }
@@ -50,10 +55,23 @@ export const HeaderContainer = styled.header`
 
       background-color: ${(props) => props.theme['yellow-light']};
       color: ${(props) => props.theme['yellow-dark']};
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        width: 1.375rem;
+        height: 1.375rem;
+      }
     }
   }
+
+  @media (max-width: 1200px) {
+    padding: 0 5rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 2rem;
+  }
 `
-
-// export const CityButton = styled.button``
-
-// export const CartButton = styled.button``

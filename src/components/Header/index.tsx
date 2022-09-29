@@ -12,12 +12,12 @@ export function Header() {
 
       <nav>
         <button type="button">
-          <MapPin size={22} weight="fill" />
+          <MapPin weight="fill" />
           Porto Alegre, RS
         </button>
 
         <NavLink to="/checkout" title="Carrinho">
-          <ShoppingCart size={22} weight="fill" />
+          <ShoppingCart weight="fill" />
         </NavLink>
       </nav>
     </HeaderContainer>
