@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const BannerWrapper = styled.div`
   width: 100vw;
   height: 34rem;
+  margin-top: 6.5rem;
 
   background-image: url('./banner-background.svg');
   background-position: center;

@@ -1,6 +1,15 @@
 import styled from 'styled-components'
 
-export const HeaderContainer = styled.header`
+export const HeaderWrapper = styled.header`
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  background-color: ${(props) => props.theme.background};
+`
+
+export const HeaderContainer = styled.div`
   width: 100%;
   max-width: 90rem;
   height: 6.5rem;
