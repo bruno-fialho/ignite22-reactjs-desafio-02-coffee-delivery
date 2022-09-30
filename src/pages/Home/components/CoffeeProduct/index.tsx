@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import { ShoppingCart } from 'phosphor-react'
+
+import { CoffeeProps } from '../..'
+import { CustomQuantityInput } from '../../../../components/CustomQuantityInput'
 
 import {
   CategoriesWrapper,
@@ -8,12 +12,8 @@ import {
   CoffeeFooter,
   CoffeePriceContainer,
   CoffeeProductContainer,
-  CoffeeQuantityCustomInput,
   CoffeeTitle,
 } from './styles'
-
-import { CoffeeProps } from '../..'
-import { Minus, Plus, ShoppingCart } from 'phosphor-react'
 
 interface CoffeeProductProps {
   data: CoffeeProps
@@ -27,13 +27,13 @@ export function CoffeeProduct({ data }: CoffeeProductProps) {
   const priceInteger = price.toString().split('.')[0]
   const priceDecimal = price.toString().split('.')[1].padEnd(2, '0')
 
-  function handleDecrementQuantity() {
+  function decrementQuantity() {
     if (selectedQuantity > 1) {
       setSelectedQuantity((value) => value - 1)
     }
   }
 
-  function handleIncrementQuantity() {
+  function incrementQuantity() {
     if (selectedQuantity < 10) {
       setSelectedQuantity((value) => value + 1)
     }
@@ -59,25 +59,11 @@ export function CoffeeProduct({ data }: CoffeeProductProps) {
           <h3>{`${priceInteger},${priceDecimal}`}</h3>
         </CoffeePriceContainer>
 
-        <CoffeeQuantityCustomInput>
-          <button
-            type="button"
-            onClick={handleDecrementQuantity}
-            disabled={selectedQuantity === 1}
-          >
-            <Minus weight="bold" />
-          </button>
-
-          <input type="number" value={selectedQuantity} readOnly />
-
-          <button
-            type="button"
-            onClick={handleIncrementQuantity}
-            disabled={selectedQuantity === 10}
-          >
-            <Plus weight="bold" />
-          </button>
-        </CoffeeQuantityCustomInput>
+        <CustomQuantityInput
+          quantity={selectedQuantity}
+          onDecrementQuantity={decrementQuantity}
+          onIncrementQuantity={incrementQuantity}
+        />
 
         <CoffeeAddToCartButton>
           <ShoppingCart weight="fill" />

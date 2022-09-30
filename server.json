@@ -113,5 +113,14 @@
       "categories": ["especial", "alcoólico"]
     }
   ],
-  "shoppingCart": []
+  "shoppingCart": [
+    {
+      "id": "21556197-a3e5-4a29-a740-3e97605dee99",
+      "quantity": 2
+    },
+    {
+      "id": "57700f28-8032-41a1-9141-fcfb9d7c9170",
+      "quantity": 1
+    }
+  ]
 }

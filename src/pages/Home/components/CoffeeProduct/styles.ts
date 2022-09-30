@@ -86,83 +86,13 @@ export const CoffeePriceContainer = styled.div`
   align-items: center;
 `
 
-export const CoffeeQuantityCustomInput = styled.div`
-  width: 4.5rem;
-  height: 2.375rem;
-  border: 0;
-  border-radius: 6px;
-  padding: 0.5rem;
-
-  color: ${(props) => props.theme['base-title']};
-  background-color: ${(props) => props.theme['base-button']};
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-  button {
-    height: 100%;
-    border: 0;
-    border-radius: 2px;
-    background-color: transparent;
-    color: ${(props) => props.theme.purple};
-    padding: 0;
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    svg {
-      width: 0.875rem;
-      height: 0.875rem;
-    }
-
-    &:disabled {
-      cursor: not-allowed;
-    }
-
-    &:not(:disabled):hover {
-      color: ${(props) => props.theme['purple-dark']};
-    }
-
-    &:focus {
-      box-shadow: none;
-    }
-  }
-
-  input {
-    width: 1.25rem;
-    height: 1.25rem;
-    border: 0;
-    background-color: transparent;
-    color: ${(props) => props.theme['base-title']};
-    padding: 0;
-    text-align: center;
-    cursor: default;
-
-    -webkit-appearance: textfield;
-    -moz-appearance: textfield;
-    appearance: textfield;
-
-    &::-webkit-inner-spin-button,
-    &::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-    }
-
-    &:focus {
-      box-shadow: none;
-    }
-  }
-`
-
 export const CoffeeAddToCartButton = styled.button`
   width: 2.375rem;
   height: 2.375rem;
   border: 0;
   border-radius: 6px;
   padding: 0.5rem;
+  cursor: pointer;
 
   color: ${(props) => props.theme.white};
   background-color: ${(props) => props.theme['purple-dark']};
@@ -171,8 +101,14 @@ export const CoffeeAddToCartButton = styled.button`
   align-items: center;
   justify-content: center;
 
+  transition: background-color 0.2s;
+
   svg {
     width: 1.375rem;
     height: 1.375rem;
+  }
+
+  &:hover {
+    background-color: ${(props) => props.theme.purple};
   }
 `

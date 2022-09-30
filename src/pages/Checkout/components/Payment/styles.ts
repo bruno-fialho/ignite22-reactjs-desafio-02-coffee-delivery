@@ -77,6 +77,8 @@ export const InputContainer = styled.div`
     justify-content: flex-start;
     gap: 0.75rem;
 
+    transition: background-color 0.2s;
+
     svg {
       width: 1rem;
       height: 1rem;

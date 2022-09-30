@@ -50,10 +50,6 @@ export function Home() {
     getCoffees()
   }, [])
 
-  useEffect(() => {
-    console.log('coffees', coffees)
-  }, [coffees])
-
   return (
     <HomeContainer>
       <Banner />

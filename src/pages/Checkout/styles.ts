@@ -11,6 +11,8 @@ export const CheckoutContainer = styled.div`
   grid-template-columns: 1.428571429fr 1fr;
   gap: 2rem;
 
+  overflow-y: hidden;
+
   @media (max-width: 1200px) {
     display: flex;
     flex-direction: column;
@@ -19,6 +21,8 @@ export const CheckoutContainer = styled.div`
     gap: 1.125rem;
 
     padding: 2.5rem 5rem 15rem;
+
+    overflow-y: auto;
   }
 
   @media (max-width: 768px) {
