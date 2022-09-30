@@ -16,6 +16,14 @@ export const CoffeesContainer = styled.div`
 
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 1200px) {
+    padding: 2rem 5rem 10rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 2rem 2rem 10rem;
+  }
 `
 
 export const CoffeesTitle = styled.h3`

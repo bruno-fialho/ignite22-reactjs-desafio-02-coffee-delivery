@@ -161,7 +161,7 @@ export const CoffeeAddToCartButton = styled.button`
   width: 2.375rem;
   height: 2.375rem;
   border: 0;
-  border-radius: 1px;
+  border-radius: 6px;
   padding: 0.5rem;
 
   color: ${(props) => props.theme.white};
