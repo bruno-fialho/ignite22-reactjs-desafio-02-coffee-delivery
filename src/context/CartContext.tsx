@@ -45,7 +45,17 @@ export const CartContext = createContext({} as CartContextProps)
 
 export function CartContextProvider({ children }: CartContextProviderProps) {
   const [coffees, setCoffees] = useState<CoffeeProps[]>([])
-  const [cart, setCart] = useState<CartItemProps[]>([])
+  const [cart, setCart] = useState<CartItemProps[]>(() => {
+    const storedStateAsJSON = localStorage.getItem(
+      '@coffee-delivery:cart-state-1.0.0',
+    )
+
+    if (storedStateAsJSON) {
+      return JSON.parse(storedStateAsJSON)
+    }
+
+    return []
+  })
 
   useEffect(() => {
     async function getCoffees() {
@@ -59,16 +69,6 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     }
 
     getCoffees()
-  }, [])
-
-  useEffect(() => {
-    const storedStateAsJSON = localStorage.getItem(
-      '@coffee-delivery:cart-state-1.0.0',
-    )
-
-    if (storedStateAsJSON) {
-      setCart(JSON.parse(storedStateAsJSON))
-    }
   }, [])
 
   useEffect(() => {
