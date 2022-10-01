@@ -11,14 +11,6 @@ export const AddressContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 1rem;
-  }
 `
 
 export const AddressHeader = styled.header`
@@ -54,6 +46,14 @@ export const AddressHeader = styled.header`
       color: ${(props) => props.theme['base-text']};
     }
   }
+`
+
+export const AddressForm = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem;
 `
 
 export const FirstLine = styled.div`

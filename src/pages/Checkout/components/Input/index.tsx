@@ -1,8 +1,19 @@
-import { InputHTMLAttributes } from 'react'
+import {
+  forwardRef,
+  ForwardRefRenderFunction,
+  InputHTMLAttributes,
+} from 'react'
 import { CustomInput } from './styles'
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {}
-
-export function Input({ ...rest }: Props) {
-  return <CustomInput {...rest} />
+interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
+  isError?: boolean
 }
+
+const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputBaseProps> = (
+  { isError = false, ...rest },
+  ref,
+) => {
+  return <CustomInput ref={ref} isError={isError} {...rest} />
+}
+
+export const Input = forwardRef(InputBase)

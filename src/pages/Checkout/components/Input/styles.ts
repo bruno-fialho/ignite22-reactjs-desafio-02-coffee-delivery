@@ -1,6 +1,10 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export const CustomInput = styled.input`
+interface CustomInputProps {
+  isError: boolean
+}
+
+export const CustomInput = styled.input<CustomInputProps>`
   width: 100%;
   height: 100%;
   padding: 0.75rem;
@@ -11,4 +15,15 @@ export const CustomInput = styled.input`
   &::placeholder {
     color: ${(props) => props.theme['base-label']};
   }
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
+
+  ${(props) =>
+    props.isError &&
+    css`
+      border: 1px solid red;
+    `}
 `

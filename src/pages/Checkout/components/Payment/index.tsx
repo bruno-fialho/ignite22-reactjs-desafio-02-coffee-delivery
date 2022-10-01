@@ -1,7 +1,11 @@
 import { Bank, CreditCard, CurrencyDollar, Money } from 'phosphor-react'
+import { useFormContext } from 'react-hook-form'
+
 import { InputContainer, PaymentContainer, PaymentHeader } from './styles'
 
 export function Payment() {
+  const { register } = useFormContext()
+
   return (
     <PaymentContainer>
       <PaymentHeader>
@@ -15,17 +19,17 @@ export function Payment() {
       </PaymentHeader>
       <InputContainer>
         <label>
-          <input type="radio" name="options" id="credit" />
+          <input type="radio" value="credit" {...register('payment')} />
           <CreditCard />
           Cartão de Crédito
         </label>
         <label>
-          <input type="radio" name="options" id="debit" />
+          <input type="radio" value="debit" {...register('payment')} />
           <Bank />
           Cartão de Débito
         </label>
         <label>
-          <input type="radio" name="options" id="money" />
+          <input type="radio" value="money" {...register('payment')} />
           <Money />
           Dinheiro
         </label>

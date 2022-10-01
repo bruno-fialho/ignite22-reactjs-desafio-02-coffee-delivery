@@ -91,7 +91,7 @@ export function Cart({ cart }: CartProps) {
         </TotalLine>
       </TotalContainer>
 
-      <ConfirmButton type="button">Confirmar Pedido</ConfirmButton>
+      <ConfirmButton type="submit">Confirmar Pedido</ConfirmButton>
     </CartContainer>
   )
 }
