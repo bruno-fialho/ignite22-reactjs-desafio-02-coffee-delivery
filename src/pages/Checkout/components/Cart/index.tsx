@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { Trash } from 'phosphor-react'
-import { api } from '../../../../services/api'
 
 import { CoffeeProps } from '../../../Home'
 import { CustomQuantityInput } from '../../../../components/CustomQuantityInput'
+import { CartContext, CartItemProps } from '../../../../context/CartContext'
 
 import {
   CartContainer,
@@ -18,32 +18,12 @@ import {
   TotalLine,
 } from './styles'
 
-export interface CartItemProps {
-  id: string
-  quantity: number
-}
-
 interface CartProps {
   cart: CartItemProps[]
 }
 
 export function Cart({ cart }: CartProps) {
-  console.log('cart', cart)
-  const [coffees, setCoffees] = useState<CoffeeProps[]>([])
-
-  async function getCoffees() {
-    try {
-      const coffeesList = await api.get<CoffeeProps[]>('/coffees')
-
-      setCoffees(coffeesList.data)
-    } catch (err) {
-      console.log('err', err)
-    }
-  }
-
-  useEffect(() => {
-    getCoffees()
-  }, [])
+  const { coffees } = useContext(CartContext)
 
   if (!cart || coffees.length === 0) {
     return <p>Carregando..</p>

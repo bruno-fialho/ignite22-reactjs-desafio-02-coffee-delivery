@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { ShoppingCart } from 'phosphor-react'
 
 import { CoffeeProps } from '../..'
+import { CartContext } from '../../../../context/CartContext'
 import { CustomQuantityInput } from '../../../../components/CustomQuantityInput'
 
 import {
@@ -23,6 +24,7 @@ export function CoffeeProduct({ data }: CoffeeProductProps) {
   const [selectedQuantity, setSelectedQuantity] = useState(1)
 
   const { name, description, type, price, categories } = data
+  const { addItemToCart } = useContext(CartContext)
 
   const priceInteger = price.toString().split('.')[0]
   const priceDecimal = price.toString().split('.')[1].padEnd(2, '0')
@@ -37,6 +39,10 @@ export function CoffeeProduct({ data }: CoffeeProductProps) {
     if (selectedQuantity < 10) {
       setSelectedQuantity((value) => value + 1)
     }
+  }
+
+  function handleAddToCart() {
+    addItemToCart(data.id, selectedQuantity)
   }
 
   return (
@@ -65,7 +71,7 @@ export function CoffeeProduct({ data }: CoffeeProductProps) {
           onIncrementQuantity={incrementQuantity}
         />
 
-        <CoffeeAddToCartButton>
+        <CoffeeAddToCartButton onClick={handleAddToCart}>
           <ShoppingCart weight="fill" />
         </CoffeeAddToCartButton>
       </CoffeeFooter>

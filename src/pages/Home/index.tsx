@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { api } from '../../services/api'
+import { useContext } from 'react'
+import { CartContext } from '../../context/CartContext'
 import { Banner } from './components/Banner'
 import { CoffeeProduct } from './components/CoffeeProduct'
 
@@ -34,21 +34,11 @@ export interface CoffeeProps {
 }
 
 export function Home() {
-  const [coffees, setCoffees] = useState<CoffeeProps[]>([])
+  const { coffees } = useContext(CartContext)
 
-  async function getCoffees() {
-    try {
-      const coffeesList = await api.get<CoffeeProps[]>('/coffees')
-
-      setCoffees(coffeesList.data)
-    } catch (err) {
-      console.log('err', err)
-    }
+  if (!coffees) {
+    return <p>Carregando...</p>
   }
-
-  useEffect(() => {
-    getCoffees()
-  }, [])
 
   return (
     <HomeContainer>

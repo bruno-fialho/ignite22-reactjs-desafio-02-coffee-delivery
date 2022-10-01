@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
+import { CartItemProps } from '../../context/CartContext'
 import { api } from '../../services/api'
 
 import { Address } from './components/Address'
-import { Cart, CartItemProps } from './components/Cart'
+import { Cart } from './components/Cart'
 import { Payment } from './components/Payment'
 
 import {
