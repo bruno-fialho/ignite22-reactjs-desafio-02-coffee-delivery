@@ -32,9 +32,10 @@ export interface CartItemProps {
 interface CartContextProps {
   coffees: CoffeeProps[]
   cart: CartItemProps[]
+  cartItemsTotal: number
   addItemToCart: (id: string, quantity: number) => void
-  // incrementItemQuantityByOne: (id: string) => void
-  // decrementItemQuantityByOne: (id: string) => void
+  incrementItemQuantityByOne: (id: string) => void
+  decrementItemQuantityByOne: (id: string) => void
 }
 
 interface CartContextProviderProps {
@@ -56,6 +57,7 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
 
     return []
   })
+  const [cartItemsTotal, setCartItemsTotal] = useState(0)
 
   useEffect(() => {
     async function getCoffees() {
@@ -75,7 +77,22 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     const cartJSON = JSON.stringify(cart)
 
     localStorage.setItem('@coffee-delivery:cart-state-1.0.0', cartJSON)
-  }, [cart])
+
+    if (cart.length > 0 && coffees.length > 0) {
+      const sumCartTotal = cart.reduce((accumulator, currentValue) => {
+        const currentCoffeeIndex = coffees.findIndex(
+          (coffee) => coffee.id === currentValue.id,
+        )
+
+        return (
+          accumulator +
+          currentValue.quantity * coffees[currentCoffeeIndex].price
+        )
+      }, 0)
+
+      setCartItemsTotal(sumCartTotal)
+    }
+  }, [cart, coffees])
 
   function addItemToCart(id: string, quantity: number) {
     const cartItem = cart.find((item) => item.id === id)
@@ -110,44 +127,43 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     }
   }
 
-  // function incrementItemQuantityByOne(id: string) {
-  //   const updatedCart = cart.forEach((item) => {
-  //     if (item.id === id) {
-  //       if (item.quantity < 10) {
-  //         item.quantity += 1
-  //       }
-  //     }
-  //   })
+  function incrementItemQuantityByOne(id: string) {
+    setCart((state) =>
+      state.map((cartItem) => {
+        if (cartItem.id === id && cartItem.quantity < 10) {
+          const updatedQuantity = cartItem.quantity + 1
 
-  //   localStorage.setItem(
-  //     '@coffee-delivery:cart-state-1.0.0',
-  //     JSON.stringify(updatedCart),
-  //   )
-  // }
+          return { ...cartItem, quantity: updatedQuantity }
+        }
 
-  // function decrementItemQuantityByOne(id: string) {
-  //   const updatedCart = cart.forEach((item) => {
-  //     if (item.id === id) {
-  //       if (item.quantity < 10) {
-  //         item.quantity += 1
-  //       }
-  //     }
-  //   })
+        return cartItem
+      }),
+    )
+  }
 
-  //   localStorage.setItem(
-  //     '@coffee-delivery:cart-state-1.0.0',
-  //     JSON.stringify(updatedCart),
-  //   )
-  // }
+  function decrementItemQuantityByOne(id: string) {
+    setCart((state) =>
+      state.map((cartItem) => {
+        if (cartItem.id === id && cartItem.quantity > 1) {
+          const updatedQuantity = cartItem.quantity - 1
+
+          return { ...cartItem, quantity: updatedQuantity }
+        }
+
+        return cartItem
+      }),
+    )
+  }
 
   return (
     <CartContext.Provider
       value={{
         coffees,
         cart,
+        cartItemsTotal,
         addItemToCart,
-        // incrementItemQuantityByOne,
-        // decrementItemQuantityByOne,
+        incrementItemQuantityByOne,
+        decrementItemQuantityByOne,
       }}
     >
       {children}

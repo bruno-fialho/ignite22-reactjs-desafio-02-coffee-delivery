@@ -1,8 +1,12 @@
+import { useContext, useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import { Trash, Warning } from 'phosphor-react'
+
+import { getPriceString } from '../../../../helpers/getPriceInteger'
 
 import { CoffeeProps } from '../../../Home'
 import { CustomQuantityInput } from '../../../../components/CustomQuantityInput'
-import { CartItemProps } from '../../../../context/CartContext'
+import { CartContext, CartItemProps } from '../../../../context/CartContext'
 
 import {
   CartContainer,
@@ -17,7 +21,6 @@ import {
   TotalContainer,
   TotalLine,
 } from './styles'
-import { NavLink } from 'react-router-dom'
 
 interface CartProps {
   coffees: CoffeeProps[]
@@ -25,13 +28,23 @@ interface CartProps {
 }
 
 export function Cart({ coffees, cart }: CartProps) {
-  if (coffees.length === 0) {
-    return <p>Carregando..</p>
+  const [deliveryFee, setDeliveryFee] = useState(3.5)
+
+  const {
+    cartItemsTotal,
+    incrementItemQuantityByOne,
+    decrementItemQuantityByOne,
+  } = useContext(CartContext)
+
+  const cartTotalWithDeliveryFee = cartItemsTotal + deliveryFee
+
+  function decrementQuantity(id: string) {
+    decrementItemQuantityByOne(id)
   }
 
-  function decrementQuantity() {}
-
-  function incrementQuantity() {}
+  function incrementQuantity(id: string) {
+    incrementItemQuantityByOne(id)
+  }
 
   return (
     <CartContainer>
@@ -52,12 +65,6 @@ export function Cart({ coffees, cart }: CartProps) {
 
             const totalPrice = item.quantity * coffeeData[0].price
 
-            const priceInteger = totalPrice.toString().split('.')[0]
-            const priceDecimal = totalPrice
-              .toString()
-              .split('.')[1]
-              .padEnd(2, '0')
-
             return (
               <CartItemContainer key={item.id}>
                 <img src={`./coffees/${coffeeData[0].type}.svg`} alt="" />
@@ -67,6 +74,7 @@ export function Cart({ coffees, cart }: CartProps) {
 
                   <InputAndButtonContainer>
                     <CustomQuantityInput
+                      itemId={item.id}
                       heightInRem={2}
                       quantity={item.quantity}
                       onDecrementQuantity={decrementQuantity}
@@ -81,7 +89,7 @@ export function Cart({ coffees, cart }: CartProps) {
                 </NameAndQuantityContainer>
 
                 <PriceWrapper>
-                  <span>R${`${priceInteger},${priceDecimal}`}</span>
+                  <span>R$ {getPriceString(totalPrice)}</span>
                 </PriceWrapper>
               </CartItemContainer>
             )
@@ -90,17 +98,32 @@ export function Cart({ coffees, cart }: CartProps) {
           <TotalContainer>
             <TotalLine>
               <p>Total de Itens</p>
-              <p>R$ 29,70</p>
+
+              {cartItemsTotal ? (
+                <p>R$ {getPriceString(cartItemsTotal)}</p>
+              ) : (
+                <p>R$ 0,00</p>
+              )}
             </TotalLine>
 
             <TotalLine>
               <p>Entrega</p>
-              <p>R$ 3,50</p>
+
+              {deliveryFee ? (
+                <p>R$ {getPriceString(deliveryFee)}</p>
+              ) : (
+                <p>R$ 0,00</p>
+              )}
             </TotalLine>
 
             <TotalLine>
               <span>Total</span>
-              <span>R$ 33,20</span>
+
+              {cartTotalWithDeliveryFee ? (
+                <span>R$ {getPriceString(cartTotalWithDeliveryFee)}</span>
+              ) : (
+                <span>R$ 0,00</span>
+              )}
             </TotalLine>
           </TotalContainer>
 

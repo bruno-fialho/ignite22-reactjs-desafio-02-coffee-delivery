@@ -66,6 +66,7 @@ export function CoffeeProduct({ data }: CoffeeProductProps) {
         </CoffeePriceContainer>
 
         <CustomQuantityInput
+          itemId={data.id}
           quantity={selectedQuantity}
           onDecrementQuantity={decrementQuantity}
           onIncrementQuantity={incrementQuantity}

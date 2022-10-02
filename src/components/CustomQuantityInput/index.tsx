@@ -3,24 +3,26 @@ import { Minus, Plus } from 'phosphor-react'
 import { CoffeeQuantityCustomInput } from './styles'
 
 interface CustomQuantityInputProps {
+  itemId: string
   quantity: number
   heightInRem?: number
-  onDecrementQuantity: () => void
-  onIncrementQuantity: () => void
+  onDecrementQuantity: (id: string) => void
+  onIncrementQuantity: (id: string) => void
 }
 
 export function CustomQuantityInput({
+  itemId,
   quantity,
   heightInRem = 2.375,
   onDecrementQuantity,
   onIncrementQuantity,
 }: CustomQuantityInputProps) {
   function handleDecrementQuantity() {
-    onDecrementQuantity()
+    onDecrementQuantity(itemId)
   }
 
   function handleIncrementQuantity() {
-    onIncrementQuantity()
+    onIncrementQuantity(itemId)
   }
 
   return (
