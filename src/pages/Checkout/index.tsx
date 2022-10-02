@@ -15,6 +15,7 @@ import {
   LeftContainer,
   RightContainer,
 } from './styles'
+import { Loading } from '../../components/Loading/Loading'
 
 const checkoutFormValidationSchema = zod.object({
   cep: zod.string().min(1, { message: 'Informe o CEP' }),
@@ -30,7 +31,7 @@ const checkoutFormValidationSchema = zod.object({
 type CheckoutFormData = zod.infer<typeof checkoutFormValidationSchema>
 
 export function Checkout() {
-  const { cart } = useContext(CartContext)
+  const { coffees, cart } = useContext(CartContext)
 
   const checkoutForm = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutFormValidationSchema),
@@ -46,20 +47,26 @@ export function Checkout() {
   }
 
   return (
-    <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
-      <FormProvider {...checkoutForm}>
-        <CheckoutContainer>
-          <LeftContainer>
-            <CheckoutTitle>Complete seu pedido</CheckoutTitle>
-            <Address />
-            <Payment />
-          </LeftContainer>
-          <RightContainer>
-            <CheckoutTitle>Cafés selecionados</CheckoutTitle>
-            <Cart cart={cart} />
-          </RightContainer>
-        </CheckoutContainer>
-      </FormProvider>
-    </form>
+    <>
+      {coffees.length === 0 ? (
+        <Loading />
+      ) : (
+        <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
+          <FormProvider {...checkoutForm}>
+            <CheckoutContainer>
+              <LeftContainer>
+                <CheckoutTitle>Complete seu pedido</CheckoutTitle>
+                <Address />
+                <Payment />
+              </LeftContainer>
+              <RightContainer>
+                <CheckoutTitle>Cafés selecionados</CheckoutTitle>
+                <Cart cart={cart} coffees={coffees} />
+              </RightContainer>
+            </CheckoutContainer>
+          </FormProvider>
+        </form>
+      )}
+    </>
   )
 }

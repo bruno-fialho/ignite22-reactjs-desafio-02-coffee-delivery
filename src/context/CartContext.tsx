@@ -68,11 +68,10 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
       }
     }
 
-    getCoffees()
+    setTimeout(() => getCoffees(), 700)
   }, [])
 
   useEffect(() => {
-    console.log('cart', cart)
     const cartJSON = JSON.stringify(cart)
 
     localStorage.setItem('@coffee-delivery:cart-state-1.0.0', cartJSON)

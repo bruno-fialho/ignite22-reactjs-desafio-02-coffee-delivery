@@ -9,6 +9,33 @@ export const CartContainer = styled.div`
   background-color: ${(props) => props.theme['base-card']};
 `
 
+export const EmptyCartMessageContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+
+  p:first-of-type {
+    font-size: 1rem;
+    color: ${(props) => props.theme['base-subtitle']};
+  }
+
+  p:last-of-type {
+    font-size: 0.875rem;
+    color: ${(props) => props.theme['base-text']};
+  }
+
+  svg {
+    width: 8rem;
+    height: 8rem;
+    margin-bottom: 4rem;
+
+    color: ${(props) => props.theme['yellow-dark']};
+  }
+`
+
 export const CartItemContainer = styled.div`
   width: 100%;
   min-height: 6.5rem;
