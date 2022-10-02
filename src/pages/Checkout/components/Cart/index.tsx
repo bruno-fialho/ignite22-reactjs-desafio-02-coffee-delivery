@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { MouseEvent, useContext, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Trash, Warning } from 'phosphor-react'
 
@@ -32,11 +32,16 @@ export function Cart({ coffees, cart }: CartProps) {
 
   const {
     cartItemsTotal,
+    removeItemFromCart,
     incrementItemQuantityByOne,
     decrementItemQuantityByOne,
   } = useContext(CartContext)
 
   const cartTotalWithDeliveryFee = cartItemsTotal + deliveryFee
+
+  function handleRemoveItemFromCart(event: MouseEvent<HTMLButtonElement>) {
+    removeItemFromCart(event.currentTarget.id)
+  }
 
   function decrementQuantity(id: string) {
     decrementItemQuantityByOne(id)
@@ -81,7 +86,10 @@ export function Cart({ coffees, cart }: CartProps) {
                       onIncrementQuantity={incrementQuantity}
                     />
 
-                    <RemoveButton>
+                    <RemoveButton
+                      id={item.id}
+                      onClick={(event) => handleRemoveItemFromCart(event)}
+                    >
                       <Trash />
                       Remover
                     </RemoveButton>

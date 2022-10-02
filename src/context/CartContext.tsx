@@ -34,6 +34,7 @@ interface CartContextProps {
   cart: CartItemProps[]
   cartItemsTotal: number
   addItemToCart: (id: string, quantity: number) => void
+  removeItemFromCart: (id: string) => void
   incrementItemQuantityByOne: (id: string) => void
   decrementItemQuantityByOne: (id: string) => void
 }
@@ -97,8 +98,6 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
   function addItemToCart(id: string, quantity: number) {
     const cartItem = cart.find((item) => item.id === id)
 
-    console.log('cartItem', cartItem)
-
     if (cartItem) {
       let updatedQuantity: number = 0
 
@@ -125,6 +124,12 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
 
       setCart((state) => [...state, newItem])
     }
+  }
+
+  function removeItemFromCart(id: string) {
+    const cartWithoutDeletedOne = cart.filter((item) => item.id !== id)
+
+    setCart(cartWithoutDeletedOne)
   }
 
   function incrementItemQuantityByOne(id: string) {
@@ -162,6 +167,7 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
         cart,
         cartItemsTotal,
         addItemToCart,
+        removeItemFromCart,
         incrementItemQuantityByOne,
         decrementItemQuantityByOne,
       }}
