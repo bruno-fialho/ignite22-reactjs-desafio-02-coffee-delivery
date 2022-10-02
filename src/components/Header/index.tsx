@@ -11,6 +11,7 @@ import {
   HeaderContainer,
   HeaderWrapper,
   LocalButton,
+  LogoContainer,
 } from './styles'
 
 export function Header() {
@@ -19,7 +20,11 @@ export function Header() {
   return (
     <HeaderWrapper>
       <HeaderContainer>
-        <img src={logoCoffee} alt="" />
+        <LogoContainer>
+          <NavLink to="/">
+            <img src={logoCoffee} alt="" />
+          </NavLink>
+        </LogoContainer>
 
         <nav>
           <LocalButton type="button">

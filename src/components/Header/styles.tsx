@@ -20,11 +20,6 @@ export const HeaderContainer = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  img {
-    width: auto;
-    height: 2.5rem;
-  }
-
   nav {
     display: flex;
     align-items: center;
@@ -37,6 +32,23 @@ export const HeaderContainer = styled.div`
 
   @media (max-width: 768px) {
     padding: 0 2rem;
+  }
+`
+
+export const LogoContainer = styled.div`
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  a:focus {
+    box-shadow: none;
+  }
+
+  img {
+    width: auto;
+    height: 2.5rem;
   }
 `
 
