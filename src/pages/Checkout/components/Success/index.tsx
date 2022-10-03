@@ -1,5 +1,8 @@
 import { Timer, MapPin, CurrencyDollar } from 'phosphor-react'
+
 import deliveryImage from '../../assets/delivery.svg'
+
+import { AddressProps } from '../../../../context/CartContext'
 
 import {
   AddressInfoContent,
@@ -14,7 +17,14 @@ import {
   TimeInfoContent,
 } from './styles'
 
-export function Success() {
+interface SuccessProps {
+  address: AddressProps
+  resetCart: () => void
+}
+
+export function Success({ address, resetCart }: SuccessProps) {
+  console.log('address', address)
+
   return (
     <SuccessContainer>
       <SuccessContent>

@@ -1,13 +1,15 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
 
 import { CartContext } from '../../context/CartContext'
 
+import { Loading } from '../../components/Loading/Loading'
 import { Address } from './components/Address'
 import { Cart } from './components/Cart'
 import { Payment } from './components/Payment'
+import { Success } from './components/Success'
 
 import {
   CheckoutContainer,
@@ -15,7 +17,6 @@ import {
   LeftContainer,
   RightContainer,
 } from './styles'
-import { Loading } from '../../components/Loading/Loading'
 
 const checkoutFormValidationSchema = zod.object({
   cep: zod.string().min(1, { message: 'Informe o CEP' }),
@@ -31,7 +32,10 @@ const checkoutFormValidationSchema = zod.object({
 type CheckoutFormData = zod.infer<typeof checkoutFormValidationSchema>
 
 export function Checkout() {
-  const { coffees, cart } = useContext(CartContext)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const { coffees, cart, address, resetCart, saveAddress } =
+    useContext(CartContext)
 
   const checkoutForm = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutFormValidationSchema),
@@ -40,10 +44,15 @@ export function Checkout() {
   const { handleSubmit, reset } = checkoutForm
 
   function handleCreateNewCycle(data: CheckoutFormData) {
-    // Go to success page
-    console.log('data', data)
+    saveAddress(data)
 
     reset()
+
+    setIsSubmitted(true)
+  }
+
+  if (isSubmitted) {
+    return <Success address={address} resetCart={resetCart} />
   }
 
   return (

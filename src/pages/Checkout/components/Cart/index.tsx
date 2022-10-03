@@ -1,4 +1,4 @@
-import { MouseEvent, useContext, useState } from 'react'
+import { MouseEvent, useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Trash, Warning } from 'phosphor-react'
 
@@ -28,7 +28,7 @@ interface CartProps {
 }
 
 export function Cart({ coffees, cart }: CartProps) {
-  const [deliveryFee, setDeliveryFee] = useState(3.5)
+  const deliveryFee = 3.5
 
   const {
     cartItemsTotal,
