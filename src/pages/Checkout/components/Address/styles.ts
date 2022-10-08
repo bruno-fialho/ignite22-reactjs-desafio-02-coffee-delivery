@@ -103,7 +103,6 @@ export const SearchAddressButton = styled.button`
   padding: 0.75rem;
   border: 0;
   border-radius: 6px;
-  /* border: 1px solid transparent; */
   cursor: pointer;
 
   color: ${(props) => props.theme.white};
@@ -115,7 +114,12 @@ export const SearchAddressButton = styled.button`
 
   transition: background-color 0.2s;
 
-  &:hover {
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):hover {
     background-color: ${(props) => props.theme['yellow-dark']};
   }
 `

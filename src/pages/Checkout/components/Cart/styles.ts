@@ -157,7 +157,6 @@ export const ConfirmButton = styled.button`
   padding: 0.75rem;
   border: 0;
   border-radius: 6px;
-  /* border: 1px solid transparent; */
   cursor: pointer;
 
   color: ${(props) => props.theme.white};

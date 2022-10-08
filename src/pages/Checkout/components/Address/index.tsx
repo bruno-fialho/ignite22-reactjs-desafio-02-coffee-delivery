@@ -16,6 +16,8 @@ import {
   SecondLine,
   ThirdLine,
 } from './styles'
+import { Toast } from '../../../../components/Toast'
+import { useState } from 'react'
 
 interface AddressResponseFromApi {
   cep: string
@@ -26,6 +28,8 @@ interface AddressResponseFromApi {
 }
 
 export function Address() {
+  const [isOpenCepErrorToast, setIsOpenCepErrorToast] = useState(false)
+
   const {
     control,
     register,
@@ -33,13 +37,33 @@ export function Address() {
     setFocus,
     setError,
     watch,
-    // reset,
+    reset,
     formState: { errors },
   } = useFormContext()
+
+  const cep: string = watch('cep') || ''
+
+  function checkCepIsNotValid(): boolean {
+    if (cep === '') {
+      return true
+    }
+
+    const cepToArray = cep.split('')
+
+    if (cepToArray.findIndex((item) => item === '_') !== -1) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  const isDisabledSearchCepButton = checkCepIsNotValid()
 
   async function getAddressFromApi(
     cep: string,
   ): Promise<AddressResponseFromApi> {
+    setIsOpenCepErrorToast(false)
+
     let addressFromApi = {} as AddressResponseFromApi
 
     try {
@@ -64,8 +88,6 @@ export function Address() {
   }
 
   async function handleUpdateAddressFromApi() {
-    const cep: string = watch('cep')
-
     if (cep.length === 8 || cep.length === 9) {
       const addressFromApi = await getAddressFromApi(String(cep))
 
@@ -76,9 +98,12 @@ export function Address() {
         setValue('state', addressFromApi.uf)
         setFocus('streetNumber')
       } else {
-        console.log('erro')
-        // reset()
-        setError('cep', { type: 'validate' }, { shouldFocus: true })
+        setIsOpenCepErrorToast(true)
+        reset()
+        setError('cep', {
+          type: 'error',
+          message: 'CEP inválido, tente novamente!',
+        })
       }
     }
   }
@@ -112,9 +137,18 @@ export function Address() {
           <SearchAddressButton
             type="button"
             onClick={handleUpdateAddressFromApi}
+            disabled={isDisabledSearchCepButton}
           >
             Pesquisar
           </SearchAddressButton>
+          {!!errors.cep?.message && isOpenCepErrorToast && (
+            <Toast
+              open={isOpenCepErrorToast}
+              onOpenChange={setIsOpenCepErrorToast}
+              message={String(errors.cep?.message)}
+              type="error"
+            />
+          )}
         </FirstLine>
         <SecondLine>
           <Controller

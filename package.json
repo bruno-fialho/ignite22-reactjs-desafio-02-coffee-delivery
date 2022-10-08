@@ -12,6 +12,7 @@
   "dependencies": {
     "@hookform/resolvers": "^2.9.8",
     "@radix-ui/react-radio-group": "^1.0.0",
+    "@radix-ui/react-toast": "^1.0.0",
     "axios": "^0.27.2",
     "lottie-react": "^2.3.1",
     "phosphor-react": "^1.4.1",
