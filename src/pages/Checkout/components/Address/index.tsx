@@ -1,5 +1,8 @@
+import { Controller, useFormContext } from 'react-hook-form'
 import { MapPinLine } from 'phosphor-react'
-import { useFormContext } from 'react-hook-form'
+import { PatternFormat } from 'react-number-format'
+
+import { cepApi } from '../../../../services/cep'
 
 import { Input } from '../Input'
 
@@ -9,15 +12,76 @@ import {
   AddressHeader,
   FirstLine,
   FourthLine,
+  SearchAddressButton,
   SecondLine,
   ThirdLine,
 } from './styles'
 
+interface AddressResponseFromApi {
+  cep: string
+  logradouro: string
+  bairro: string
+  localidade: string
+  uf: string
+}
+
 export function Address() {
   const {
+    control,
     register,
+    setValue,
+    setFocus,
+    setError,
+    watch,
+    // reset,
     formState: { errors },
   } = useFormContext()
+
+  async function getAddressFromApi(
+    cep: string,
+  ): Promise<AddressResponseFromApi> {
+    let addressFromApi = {} as AddressResponseFromApi
+
+    try {
+      const response = await cepApi.get<AddressResponseFromApi>(`${cep}/json`)
+
+      if (response.status === 200) {
+        const { data } = response
+
+        addressFromApi = {
+          cep: data.cep,
+          logradouro: data.logradouro,
+          bairro: data.bairro,
+          localidade: data.localidade,
+          uf: data.uf,
+        }
+      }
+    } catch (err) {
+      console.log('err', err)
+    }
+
+    return addressFromApi
+  }
+
+  async function handleUpdateAddressFromApi() {
+    const cep: string = watch('cep')
+
+    if (cep.length === 8 || cep.length === 9) {
+      const addressFromApi = await getAddressFromApi(String(cep))
+
+      if (addressFromApi.logradouro) {
+        setValue('street', addressFromApi.logradouro)
+        setValue('city', addressFromApi.localidade)
+        setValue('neighborhood', addressFromApi.bairro)
+        setValue('state', addressFromApi.uf)
+        setFocus('streetNumber')
+      } else {
+        console.log('erro')
+        // reset()
+        setError('cep', { type: 'validate' }, { shouldFocus: true })
+      }
+    }
+  }
 
   return (
     <AddressContainer>
@@ -30,21 +94,43 @@ export function Address() {
       </AddressHeader>
       <AddressForm>
         <FirstLine>
-          <Input
-            id="cep"
-            type="text"
-            placeholder="CEP"
-            isError={!!errors.cep?.message}
-            {...register('cep')}
+          <Controller
+            control={control}
+            name="cep"
+            render={({ field: { name, onChange, value } }) => (
+              <PatternFormat
+                name={name}
+                value={value}
+                onChange={onChange}
+                format="#####-###"
+                mask="_"
+                isError={!!errors.cep?.message}
+                customInput={Input}
+              />
+            )}
           />
+          <SearchAddressButton
+            type="button"
+            onClick={handleUpdateAddressFromApi}
+          >
+            Pesquisar
+          </SearchAddressButton>
         </FirstLine>
         <SecondLine>
-          <Input
-            id="street"
-            type="text"
-            placeholder="Rua"
-            isError={!!errors.street?.message}
-            {...register('street')}
+          <Controller
+            control={control}
+            name="street"
+            render={({ field: { value, onChange, ref } }) => (
+              <Input
+                id="street"
+                ref={ref}
+                value={value}
+                onChange={onChange}
+                type="text"
+                placeholder="Rua"
+                isError={!!errors.street?.message}
+              />
+            )}
           />
         </SecondLine>
         <ThirdLine>
@@ -59,30 +145,55 @@ export function Address() {
             id="complement"
             type="text"
             placeholder="Complemento"
+            isError={!!errors.complement?.message}
             {...register('complement')}
           />
         </ThirdLine>
         <FourthLine>
-          <Input
-            id="neighborhood"
-            type="text"
-            placeholder="Bairro"
-            isError={!!errors.neighborhood?.message}
-            {...register('neighborhood')}
+          <Controller
+            control={control}
+            name="neighborhood"
+            render={({ field: { value, onChange, ref } }) => (
+              <Input
+                id="neighborhood"
+                ref={ref}
+                value={value}
+                onChange={onChange}
+                type="text"
+                placeholder="Bairro"
+                isError={!!errors.neighborhood?.message}
+              />
+            )}
           />
-          <Input
-            id="city"
-            type="text"
-            placeholder="Cidade"
-            isError={!!errors.city?.message}
-            {...register('city')}
+          <Controller
+            control={control}
+            name="city"
+            render={({ field: { value, onChange, ref } }) => (
+              <Input
+                id="city"
+                ref={ref}
+                value={value}
+                onChange={onChange}
+                type="text"
+                placeholder="Cidade"
+                isError={!!errors.city?.message}
+              />
+            )}
           />
-          <Input
-            id="state"
-            type="text"
-            placeholder="UF"
-            isError={!!errors.state?.message}
-            {...register('state')}
+          <Controller
+            control={control}
+            name="state"
+            render={({ field: { value, onChange, ref } }) => (
+              <Input
+                id="state"
+                ref={ref}
+                value={value}
+                onChange={onChange}
+                type="text"
+                placeholder="UF"
+                isError={!!errors.state?.message}
+              />
+            )}
           />
         </FourthLine>
       </AddressForm>

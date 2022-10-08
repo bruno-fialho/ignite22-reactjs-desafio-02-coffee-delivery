@@ -60,6 +60,12 @@ export const FirstLine = styled.div`
   width: 100%;
   min-height: 2.265rem;
 
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+
   input {
     max-width: 12.5rem;
   }
@@ -89,5 +95,27 @@ export const FourthLine = styled.div`
 
   @media (max-width: 576px) {
     grid-template-columns: 2.5fr 4fr 1fr;
+  }
+`
+export const SearchAddressButton = styled.button`
+  width: auto;
+  height: 2.875rem;
+  padding: 0.75rem;
+  border: 0;
+  border-radius: 6px;
+  /* border: 1px solid transparent; */
+  cursor: pointer;
+
+  color: ${(props) => props.theme.white};
+  background-color: ${(props) => props.theme.yellow};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: ${(props) => props.theme['yellow-dark']};
   }
 `

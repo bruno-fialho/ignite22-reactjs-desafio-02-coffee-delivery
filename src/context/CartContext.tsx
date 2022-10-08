@@ -29,28 +29,15 @@ export interface CartItemProps {
   quantity: number
 }
 
-export interface AddressProps {
-  state: string
-  cep: string
-  street: string
-  streetNumber: number
-  complement?: string
-  neighborhood: string
-  city: string
-  payment: 'credit' | 'debit' | 'money'
-}
-
 interface CartContextProps {
   coffees: CoffeeProps[]
   cart: CartItemProps[]
   cartItemsTotal: number
-  address: AddressProps
   addItemToCart: (id: string, quantity: number) => void
   removeItemFromCart: (id: string) => void
   incrementItemQuantityByOne: (id: string) => void
   decrementItemQuantityByOne: (id: string) => void
   resetCart: () => void
-  saveAddress: (addressData: AddressProps) => void
 }
 
 interface CartContextProviderProps {
@@ -73,7 +60,6 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     return []
   })
   const [cartItemsTotal, setCartItemsTotal] = useState(0)
-  const [address, setAddress] = useState({} as AddressProps)
 
   useEffect(() => {
     async function getCoffees() {
@@ -179,23 +165,17 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     setCart(() => [])
   }
 
-  function saveAddress(addressData: AddressProps) {
-    setAddress(addressData)
-  }
-
   return (
     <CartContext.Provider
       value={{
         coffees,
         cart,
-        address,
         cartItemsTotal,
         addItemToCart,
         removeItemFromCart,
         incrementItemQuantityByOne,
         decrementItemQuantityByOne,
         resetCart,
-        saveAddress,
       }}
     >
       {children}

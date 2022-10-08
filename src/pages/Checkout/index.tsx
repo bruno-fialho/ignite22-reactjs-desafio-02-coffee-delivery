@@ -18,9 +18,19 @@ import {
   RightContainer,
 } from './styles'
 
+export interface CheckoutDataProps {
+  state: string
+  street: string
+  streetNumber: number
+  complement?: string
+  neighborhood: string
+  city: string
+  payment: 'credit' | 'debit' | 'money'
+}
+
 const checkoutFormValidationSchema = zod.object({
-  cep: zod.string().min(1, { message: 'Informe o CEP' }),
-  street: zod.string().min(1, { message: 'Informe o endereço' }),
+  cep: zod.string().min(1, { message: 'Informe o CEP correto' }),
+  street: zod.string().min(1, { message: 'Inaforme o endereço' }),
   streetNumber: zod.number().int({ message: 'Informe o número' }),
   complement: zod.string().optional(),
   neighborhood: zod.string().min(1, { message: 'Informe o bairro' }),
@@ -33,18 +43,25 @@ type CheckoutFormData = zod.infer<typeof checkoutFormValidationSchema>
 
 export function Checkout() {
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [checkoutData, setCheckoutData] = useState({} as CheckoutDataProps)
 
-  const { coffees, cart, address, resetCart, saveAddress } =
-    useContext(CartContext)
+  const { coffees, cart, resetCart } = useContext(CartContext)
 
   const checkoutForm = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutFormValidationSchema),
+    defaultValues: {
+      cep: '',
+      street: '',
+      city: '',
+      neighborhood: '',
+      state: '',
+    },
   })
 
   const { handleSubmit, reset } = checkoutForm
 
-  function handleCreateNewCycle(data: CheckoutFormData) {
-    saveAddress(data)
+  function handleConfirmCheckout(data: CheckoutFormData) {
+    setCheckoutData(data)
 
     reset()
 
@@ -52,7 +69,7 @@ export function Checkout() {
   }
 
   if (isSubmitted) {
-    return <Success address={address} resetCart={resetCart} />
+    return <Success checkoutData={checkoutData} resetCart={resetCart} />
   }
 
   return (
@@ -60,7 +77,7 @@ export function Checkout() {
       {coffees.length === 0 ? (
         <Loading />
       ) : (
-        <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
+        <form onSubmit={handleSubmit(handleConfirmCheckout)} action="">
           <FormProvider {...checkoutForm}>
             <CheckoutContainer>
               <LeftContainer>

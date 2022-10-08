@@ -1,8 +1,8 @@
 import { Timer, MapPin, CurrencyDollar } from 'phosphor-react'
 
-import deliveryImage from '../../assets/delivery.svg'
+import deliveryImage from '../../../../assets/delivery.svg'
 
-import { AddressProps } from '../../../../context/CartContext'
+import { CheckoutDataProps } from '../..'
 
 import {
   AddressInfoContent,
@@ -16,14 +16,33 @@ import {
   SuccessTitle,
   TimeInfoContent,
 } from './styles'
+import { useEffect } from 'react'
 
 interface SuccessProps {
-  address: AddressProps
+  checkoutData: CheckoutDataProps
   resetCart: () => void
 }
 
-export function Success({ address, resetCart }: SuccessProps) {
-  console.log('address', address)
+export function Success({ checkoutData, resetCart }: SuccessProps) {
+  const {
+    street,
+    streetNumber,
+    complement,
+    neighborhood,
+    city,
+    state,
+    payment,
+  } = checkoutData
+
+  const paymentMethod = {
+    credit: 'Cartão de crédito',
+    debit: 'Cartão de débito',
+    money: 'Dinheiro',
+  }
+
+  useEffect(() => {
+    resetCart()
+  }, [resetCart])
 
   return (
     <SuccessContainer>
@@ -40,9 +59,14 @@ export function Success({ address, resetCart }: SuccessProps) {
             </IconWrapper>
             <div>
               <p>
-                Entrega em <span>Rua João Daniel Martinelli, 102</span>
+                Entrega em{' '}
+                <span>
+                  {street}, {streetNumber} ({complement})
+                </span>
               </p>
-              <p>Farrapos - Porto Alegre, RS</p>
+              <p>
+                {neighborhood} - {city}, {state}
+              </p>
             </div>
           </AddressInfoContent>
           <TimeInfoContent>
@@ -60,7 +84,7 @@ export function Success({ address, resetCart }: SuccessProps) {
             </IconWrapper>
             <div>
               <p>Pagamento na entrega</p>
-              <span>Cartão de Crédito</span>
+              <span>{paymentMethod[payment]}</span>
             </div>
           </PaymentInfoContent>
         </DeliveryInfoContainer>
