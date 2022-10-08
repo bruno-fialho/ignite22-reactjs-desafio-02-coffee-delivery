@@ -45,7 +45,7 @@ export function Checkout() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [checkoutData, setCheckoutData] = useState({} as CheckoutDataProps)
 
-  const { coffees, cart, resetCart } = useContext(CartContext)
+  const { coffees, cart } = useContext(CartContext)
 
   const checkoutForm = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutFormValidationSchema),
@@ -55,21 +55,20 @@ export function Checkout() {
       city: '',
       neighborhood: '',
       state: '',
+      payment: 'credit',
     },
   })
 
-  const { handleSubmit, reset } = checkoutForm
+  const { handleSubmit } = checkoutForm
 
   function handleConfirmCheckout(data: CheckoutFormData) {
     setCheckoutData(data)
-
-    reset()
 
     setIsSubmitted(true)
   }
 
   if (isSubmitted) {
-    return <Success checkoutData={checkoutData} resetCart={resetCart} />
+    return <Success checkoutData={checkoutData} />
   }
 
   return (

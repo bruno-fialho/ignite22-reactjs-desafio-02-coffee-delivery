@@ -1,10 +1,15 @@
+import { Controller, useFormContext } from 'react-hook-form'
 import { Bank, CreditCard, CurrencyDollar, Money } from 'phosphor-react'
-import { useFormContext } from 'react-hook-form'
 
-import { InputContainer, PaymentContainer, PaymentHeader } from './styles'
+import {
+  PaymentContainer,
+  PaymentHeader,
+  PaymentTypeButton,
+  PaymentTypeContainer,
+} from './styles'
 
 export function Payment() {
-  const { register } = useFormContext()
+  const { control } = useFormContext()
 
   return (
     <PaymentContainer>
@@ -17,23 +22,31 @@ export function Payment() {
           </p>
         </div>
       </PaymentHeader>
-      <InputContainer>
-        <label>
-          <input type="radio" value="credit" {...register('payment')} />
-          <CreditCard />
-          Cartão de Crédito
-        </label>
-        <label>
-          <input type="radio" value="debit" {...register('payment')} />
-          <Bank />
-          Cartão de Débito
-        </label>
-        <label>
-          <input type="radio" value="money" {...register('payment')} />
-          <Money />
-          Dinheiro
-        </label>
-      </InputContainer>
+      <Controller
+        control={control}
+        name="payment"
+        render={({ field }) => {
+          return (
+            <PaymentTypeContainer
+              onValueChange={field.onChange}
+              value={field.value}
+            >
+              <PaymentTypeButton value="credit">
+                <CreditCard />
+                Cartão de Crédito
+              </PaymentTypeButton>
+              <PaymentTypeButton value="debit">
+                <Bank />
+                Cartão de Débito
+              </PaymentTypeButton>
+              <PaymentTypeButton value="money">
+                <Money />
+                Dinheiro
+              </PaymentTypeButton>
+            </PaymentTypeContainer>
+          )
+        }}
+      />
     </PaymentContainer>
   )
 }

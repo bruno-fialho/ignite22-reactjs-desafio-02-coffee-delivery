@@ -16,14 +16,14 @@ import {
   SuccessTitle,
   TimeInfoContent,
 } from './styles'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
+import { CartContext } from '../../../../context/CartContext'
 
 interface SuccessProps {
   checkoutData: CheckoutDataProps
-  resetCart: () => void
 }
 
-export function Success({ checkoutData, resetCart }: SuccessProps) {
+export function Success({ checkoutData }: SuccessProps) {
   const {
     street,
     streetNumber,
@@ -34,6 +34,8 @@ export function Success({ checkoutData, resetCart }: SuccessProps) {
     payment,
   } = checkoutData
 
+  const { cart, resetCart } = useContext(CartContext)
+
   const paymentMethod = {
     credit: 'Cartão de crédito',
     debit: 'Cartão de débito',
@@ -41,8 +43,10 @@ export function Success({ checkoutData, resetCart }: SuccessProps) {
   }
 
   useEffect(() => {
-    resetCart()
-  }, [resetCart])
+    if (cart.length > 0) {
+      resetCart()
+    }
+  }, [cart, resetCart])
 
   return (
     <SuccessContainer>
@@ -61,7 +65,7 @@ export function Success({ checkoutData, resetCart }: SuccessProps) {
               <p>
                 Entrega em{' '}
                 <span>
-                  {street}, {streetNumber} ({complement})
+                  {street}, {streetNumber} {complement && `(${complement})`}
                 </span>
               </p>
               <p>
