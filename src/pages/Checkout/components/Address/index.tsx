@@ -1,10 +1,13 @@
+import { FocusEvent, useContext, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { MapPinLine } from 'phosphor-react'
 import { PatternFormat } from 'react-number-format'
 
 import { cepApi } from '../../../../services/cep'
+import { CartContext } from '../../../../context/CartContext'
 
 import { Input } from '../Input'
+import { Toast } from '../../../../components/Toast'
 
 import {
   AddressContainer,
@@ -16,8 +19,6 @@ import {
   SecondLine,
   ThirdLine,
 } from './styles'
-import { Toast } from '../../../../components/Toast'
-import { useState } from 'react'
 
 interface AddressResponseFromApi {
   cep: string
@@ -30,9 +31,10 @@ interface AddressResponseFromApi {
 export function Address() {
   const [isOpenCepErrorToast, setIsOpenCepErrorToast] = useState(false)
 
+  const { createAddress, updateAddress } = useContext(CartContext)
+
   const {
     control,
-    register,
     setValue,
     setFocus,
     setError,
@@ -79,6 +81,15 @@ export function Address() {
           localidade: data.localidade,
           uf: data.uf,
         }
+
+        createAddress({
+          cep: data.cep,
+          street: data.logradouro,
+          neighborhood: data.bairro,
+          streetNumber: undefined,
+          city: data.localidade,
+          state: data.uf,
+        })
       }
     } catch (err) {
       console.log('err', err)
@@ -89,23 +100,39 @@ export function Address() {
 
   async function handleUpdateAddressFromApi() {
     if (cep.length === 8 || cep.length === 9) {
+      reset()
       const addressFromApi = await getAddressFromApi(String(cep))
 
       if (addressFromApi.logradouro) {
+        setValue('cep', addressFromApi.cep)
         setValue('street', addressFromApi.logradouro)
         setValue('city', addressFromApi.localidade)
         setValue('neighborhood', addressFromApi.bairro)
         setValue('state', addressFromApi.uf)
+        setValue('streetNumber', NaN)
         setFocus('streetNumber')
       } else {
         setIsOpenCepErrorToast(true)
-        reset()
         setError('cep', {
           type: 'error',
           message: 'CEP inválido, tente novamente!',
         })
       }
     }
+  }
+
+  function handleUpdateStreetNumberToApi(
+    event: FocusEvent<HTMLInputElement, Element>,
+  ) {
+    setValue('streetNumber', event.target.value)
+    updateAddress(event.target.value, 'streetNumber')
+  }
+
+  function handleUpdateComplementToApi(
+    event: FocusEvent<HTMLInputElement, Element>,
+  ) {
+    setValue('complement', event.target.value)
+    updateAddress(event.target.value, 'complement')
   }
 
   return (
@@ -168,19 +195,37 @@ export function Address() {
           />
         </SecondLine>
         <ThirdLine>
-          <Input
-            id="streetNumber"
-            type="number"
-            placeholder="Número"
-            isError={!!errors.streetNumber?.message}
-            {...register('streetNumber', { valueAsNumber: true })}
+          <Controller
+            control={control}
+            name="streetNumber"
+            render={({ field: { value, onChange, ref } }) => (
+              <Input
+                id="streetNumber"
+                ref={ref}
+                value={value}
+                onChange={onChange}
+                onBlur={(event) => handleUpdateStreetNumberToApi(event)}
+                type="number"
+                placeholder="Número"
+                isError={!!errors.streetNumber?.message}
+              />
+            )}
           />
-          <Input
-            id="complement"
-            type="text"
-            placeholder="Complemento"
-            isError={!!errors.complement?.message}
-            {...register('complement')}
+          <Controller
+            control={control}
+            name="complement"
+            render={({ field: { value, onChange, ref } }) => (
+              <Input
+                id="complement"
+                ref={ref}
+                value={value}
+                onChange={onChange}
+                onBlur={(event) => handleUpdateComplementToApi(event)}
+                type="text"
+                placeholder="Complemento"
+                isError={!!errors.complement?.message}
+              />
+            )}
           />
         </ThirdLine>
         <FourthLine>

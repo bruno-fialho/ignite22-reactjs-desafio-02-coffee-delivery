@@ -1,6 +1,16 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
 import { api } from '../services/api'
 
+interface AddressProps {
+  cep: string
+  street: string
+  streetNumber?: number
+  complement?: string
+  neighborhood: string
+  city: string
+  state: string
+}
+
 export interface CoffeeProps {
   id: string
   name: string
@@ -38,6 +48,9 @@ interface CartContextProps {
   incrementItemQuantityByOne: (id: string) => void
   decrementItemQuantityByOne: (id: string) => void
   resetCart: () => void
+  createAddress: (address: AddressProps) => void
+  updateAddress: (value: string, type: 'streetNumber' | 'complement') => void
+  address: AddressProps
 }
 
 interface CartContextProviderProps {
@@ -60,6 +73,17 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     return []
   })
   const [cartItemsTotal, setCartItemsTotal] = useState(0)
+  const [address, setAddress] = useState<AddressProps>(() => {
+    const storedStateAsJSON = localStorage.getItem(
+      '@coffee-delivery:address-state-1.0.0',
+    )
+
+    if (storedStateAsJSON) {
+      return JSON.parse(storedStateAsJSON)
+    }
+
+    return []
+  })
 
   useEffect(() => {
     async function getCoffees() {
@@ -165,6 +189,35 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     setCart(() => [])
   }
 
+  function createAddress(address: AddressProps) {
+    setAddress({} as AddressProps)
+    setAddress(address)
+  }
+
+  function updateAddress(value: string, type: 'streetNumber' | 'complement') {
+    if (type === 'streetNumber') {
+      setAddress((state) => {
+        return {
+          ...state,
+          streetNumber: Number(value),
+        }
+      })
+    } else if (type === 'complement') {
+      setAddress((state) => {
+        return {
+          ...state,
+          complement: value,
+        }
+      })
+    }
+  }
+
+  useEffect(() => {
+    const addressJSON = JSON.stringify(address)
+
+    localStorage.setItem('@coffee-delivery:address-state-1.0.0', addressJSON)
+  }, [address])
+
   return (
     <CartContext.Provider
       value={{
@@ -176,6 +229,9 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
         incrementItemQuantityByOne,
         decrementItemQuantityByOne,
         resetCart,
+        createAddress,
+        updateAddress,
+        address,
       }}
     >
       {children}

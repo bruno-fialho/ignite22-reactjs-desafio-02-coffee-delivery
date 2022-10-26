@@ -15,7 +15,7 @@ import {
 } from './styles'
 
 export function Header() {
-  const { cart } = useContext(CartContext)
+  const { cart, address } = useContext(CartContext)
 
   return (
     <HeaderWrapper>
@@ -27,10 +27,12 @@ export function Header() {
         </LogoContainer>
 
         <nav>
-          <LocalButton type="button">
-            <MapPin weight="fill" />
-            Porto Alegre, RS
-          </LocalButton>
+          {address.city && (
+            <LocalButton type="button">
+              <MapPin weight="fill" />
+              {address.city}, {address.state}
+            </LocalButton>
+          )}
 
           <CartLinkWrapper>
             <NavLink to="/checkout" title="Carrinho">
