@@ -21,7 +21,7 @@ import {
 export interface CheckoutDataProps {
   state: string
   street: string
-  streetNumber: number | null
+  streetNumber: number
   complement?: string
   neighborhood: string
   city: string
@@ -31,7 +31,7 @@ export interface CheckoutDataProps {
 const checkoutFormValidationSchema = zod.object({
   cep: zod.string().min(1, { message: 'Informe o CEP correto' }),
   street: zod.string().min(1, { message: 'Inaforme o endereço' }),
-  streetNumber: zod.number().int({ message: 'Informe o número' }).nullable(),
+  streetNumber: zod.number().int({ message: 'Informe o número' }),
   complement: zod.string().optional(),
   neighborhood: zod.string().min(1, { message: 'Informe o bairro' }),
   city: zod.string().min(1, { message: 'Informe o cidade' }),
@@ -52,7 +52,6 @@ export function Checkout() {
     defaultValues: {
       cep: address.cep || '',
       street: address.street || '',
-      streetNumber: address.streetNumber || null,
       complement: address.complement || '',
       city: address.city || '',
       neighborhood: address.neighborhood || '',
@@ -64,6 +63,7 @@ export function Checkout() {
   const { handleSubmit } = checkoutForm
 
   function handleConfirmCheckout(data: CheckoutFormData) {
+    console.log('data', data)
     setCheckoutData(data)
 
     setIsSubmitted(true)

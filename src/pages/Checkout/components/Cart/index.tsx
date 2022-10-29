@@ -35,7 +35,6 @@ export function Cart({ coffees, cart }: CartProps) {
     removeItemFromCart,
     incrementItemQuantityByOne,
     decrementItemQuantityByOne,
-    address,
   } = useContext(CartContext)
 
   const cartTotalWithDeliveryFee = cartItemsTotal + deliveryFee
@@ -51,9 +50,6 @@ export function Cart({ coffees, cart }: CartProps) {
   function incrementQuantity(id: string) {
     incrementItemQuantityByOne(id)
   }
-
-  const isDisabledCheckout =
-    !address.cep || !address.streetNumber || address.streetNumber === 0
 
   return (
     <CartContainer>
@@ -139,9 +135,7 @@ export function Cart({ coffees, cart }: CartProps) {
             </TotalLine>
           </TotalContainer>
 
-          <ConfirmButton type="submit" disabled={isDisabledCheckout}>
-            Confirmar Pedido
-          </ConfirmButton>
+          <ConfirmButton type="submit">Confirmar Pedido</ConfirmButton>
         </>
       )}
     </CartContainer>

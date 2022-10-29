@@ -49,7 +49,6 @@ interface CartContextProps {
   decrementItemQuantityByOne: (id: string) => void
   resetCart: () => void
   createAddress: (address: AddressProps) => void
-  updateAddress: (value: string, type: 'streetNumber' | 'complement') => void
   address: AddressProps
 }
 
@@ -74,7 +73,7 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
   })
   const [cartItemsTotal, setCartItemsTotal] = useState(0)
   const [address, setAddress] = useState<AddressProps>(() => {
-    const storedStateAsJSON = localStorage.getItem(
+    const storedStateAsJSON = sessionStorage.getItem(
       '@coffee-delivery:address-state-1.0.0',
     )
 
@@ -194,28 +193,10 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     setAddress(address)
   }
 
-  function updateAddress(value: string, type: 'streetNumber' | 'complement') {
-    if (type === 'streetNumber') {
-      setAddress((state) => {
-        return {
-          ...state,
-          streetNumber: Number(value),
-        }
-      })
-    } else if (type === 'complement') {
-      setAddress((state) => {
-        return {
-          ...state,
-          complement: value,
-        }
-      })
-    }
-  }
-
   useEffect(() => {
     const addressJSON = JSON.stringify(address)
 
-    localStorage.setItem('@coffee-delivery:address-state-1.0.0', addressJSON)
+    sessionStorage.setItem('@coffee-delivery:address-state-1.0.0', addressJSON)
   }, [address])
 
   return (
@@ -230,7 +211,6 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
         decrementItemQuantityByOne,
         resetCart,
         createAddress,
-        updateAddress,
         address,
       }}
     >
